@@ -16,20 +16,44 @@ miniGit::~miniGit() {
     // TODO
 }
 
-void printCommit(doublyNode *Commit){// helper function that prints current list of commits
-    cout<< "Staged Changes: "<< endl;
+void printCommit(singlyNode *Commit){// helper function that prints current list of commits
+    cout<< "====================================="<< endl;
+    cout<< endl << "Staged Changes: "<< endl;
     while(Commit != NULL){
-        cout<< Commit->head->fileName<< endl;
+        cout<< Commit->fileName<< " ver: " << Commit->fileVersion<< endl;
         Commit=Commit->next;
     }
-
+    cout<< endl<< "====================================="<< endl ;
 }
 
-bool miniGit::gitAdd(string fileName){ //Created by: COLLIN Rasbid
+int findVersionNumber(doublyNode *CommitSet, string filename, int CommitNumber){//helper function to find the version number of our commit
+bool versionFound=false;
+int prevVersion=0;
+singlyNode * myFiles;
+
+for(int i=0; i< CommitNumber;i++)
+    while(CommitSet!=NULL){//loop through all of our previous commits
+        myFiles=CommitSet->head;
+
+        while(myFiles!=NULL){// loop through the files contained within a specific commit
+
+            if(myFiles->fileName == filename){
+                prevVersion = stoi(myFiles->fileVersion); 
+                break;
+            }
+            else{
+                myFiles=myFiles->next;
+            }
+        }
+    }
+    return prevVersion+1;
+}
+
+bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Rasbid
     bool found=false;
     bool addedAlready=false;
     int fileIndex=-1;
-    
+    int version;
     doublyNode *myCommit =new doublyNode;
     singlyNode *myFile= new singlyNode;
 
@@ -58,33 +82,68 @@ bool miniGit::gitAdd(string fileName){ //Created by: COLLIN Rasbid
                     
                     dhead->head=myFile;
                     myFile->fileName=fileName;
+                    myFile->fileVersion="1";
                 }
                 else{
-                    //find how many commits have been made already
-
-
-
 
                     //check to see if file has been added to commit already:
-                    while(myCommit->head=NULL){
-                        if(myCommit->head->fileName==fileName){
-                            addedAlready=true;
-                            cout <<"File has been added to Commits already"<< endl;
-                            break;
+                    myCommit=dhead;
+
+                    while(myCommit !=NULL){//loop through doubly linked list to get to the correct commit number
+                        
+
+                        if(myCommit->commitNumber==CommitNumber){//if the DLL is the same commit number that we are on
+                                myFile=myCommit->head; //sll starts at the head pointed to in dll
+                                
+                                while(myFile!=NULL){ // while sll is not null
+                                    if(myFile->fileName==fileName){ //if filename in sll is the same as one staged for commmits mark it as added already
+                                       
+                                        addedAlready=true;
+                                        break;
+                                    }
+                                    else{// otherwise keep looking for duplicate filename until we reach the end of our sll
+                                        myFile=myFile->next; 
+                                    }
+                                }
+
+                                break;     
+                        }  
+                         
+                        else{// if we arent on the correct commit number iterate to the next one
+                            myCommit=myCommit->next;
                         }
+
                     }
                     
                     if( !addedAlready){// if file has not been added already
+                        myFile=dhead->head; // set sll as the head from the dll
+                        singlyNode *newNode = new singlyNode;
                         
-
-                    }
+                        
+                        if(myFile->next!=NULL){ // if the file isnt the last one in the sll
+                            myFile=myFile->next; //iterate to the next file in the sll
+                        }
+                        // once last file has been found set the next one as our new entry
+                        myFile->next=newNode;
+                        newNode->fileName=fileName;
+                        version=findVersionNumber(dhead,fileName,CommitNumber);
+                        newNode->fileVersion=to_string(version);
+                        // cout<< newNode->fileName << " Has been Committed "<< endl;
+                    }   
+                    else{cout<< "File Already Commited"<< endl<< endl;}
 
                     break;
                 }
             }
         }
         if (found==true){//if the filename is included in the directory
-            printCommit(dhead);
+           
+           
+           
+           
+            printCommit(myFile);
+
+
         }
         else{
             cout<< "Filename Not Found please enter a valid filename"<< endl << endl;

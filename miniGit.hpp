@@ -18,7 +18,7 @@ struct doublyNode{
     singlyNode * head;
     doublyNode * previous;
     doublyNode * next;
-    bool committed;// tracks weather or not commit is being stage or has been fully committed
+    bool committed;// tracks weather or not commit is being staged or has been fully committed
 };
 
 
@@ -28,7 +28,7 @@ class miniGit {
     doublyNode* dhead;
     public:
     miniGit();  // Constructor
-    bool gitAdd(string fileName); //funciton to add a file to repository
+    bool gitAdd(string fileName,int CommitNumber); //funciton to add a file to repository
     ~miniGit(); // Destructor
 
 };

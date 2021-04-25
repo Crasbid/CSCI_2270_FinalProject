@@ -30,6 +30,7 @@ char choice;
 string userInput;
 bool quit=false;
 string fname;
+int CommitNumber=0;
 
 cout << "==== Welcome To Mini-Git ====" << endl;
 
@@ -69,10 +70,11 @@ while(!quit){
             cout<<"Enter name of file to be added to commit"<< endl;
 
             cin>>fname;
-            result= mGit.gitAdd(fname);
+            result= mGit.gitAdd(fname,CommitNumber);
            }
             break;
-
+        case 3:
+        CommitNumber++;
         case 5:
             quit=true;
             cout<< "Goodbye"<< endl;
