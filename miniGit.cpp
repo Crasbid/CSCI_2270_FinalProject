@@ -16,9 +16,20 @@ miniGit::~miniGit() {
     // TODO
 }
 
-void printCommit(singlyNode *Commit){// helper function that prints current list of commits
+void printCommit(doublyNode *head,int CommitNumber){// helper function that prints current list of commits
     cout<< "====================================="<< endl;
     cout<< endl << "Staged Changes: "<< endl;
+    
+    singlyNode *Commit;
+    doublyNode *myCommit=head;
+    while(myCommit !=NULL){//loop through doubly linked list to get to the correct commit number
+        if(myCommit->commitNumber==CommitNumber){
+            Commit=myCommit->head;
+        }
+        myCommit=myCommit->next;
+    }
+
+
     while(Commit != NULL){
         cout<< Commit->fileName<< " ver: " << Commit->fileVersion<< endl;
         Commit=Commit->next;
@@ -130,7 +141,7 @@ bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Ras
                         newNode->fileVersion=to_string(version);
                         // cout<< newNode->fileName << " Has been Committed "<< endl;
                     }   
-                    else{cout<< "File Already Commited"<< endl<< endl;}
+                    else{cout<< endl<< "****File Already Commited****"<< endl<< endl;}
 
                     break;
                 }
@@ -138,10 +149,7 @@ bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Ras
         }
         if (found==true){//if the filename is included in the directory
            
-           
-           
-           
-            printCommit(myFile);
+           printCommit(dhead,CommitNumber);
 
 
         }
