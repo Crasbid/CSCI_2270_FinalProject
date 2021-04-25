@@ -9,16 +9,30 @@
 using namespace std;
 
 miniGit::miniGit() {
-    doublyNode* head = NULL;
+    dhead=NULL;
+    
 }
-
 miniGit::~miniGit() {
     // TODO
 }
 
-bool miniGit::gitAdd(string fileName){
+void printCommit(doublyNode *Commit){// helper function that prints current list of commits
+    cout<< "Staged Changes: "<< endl;
+    while(Commit != NULL){
+        cout<< Commit->head->fileName<< endl;
+        Commit=Commit->next;
+    }
+
+}
+
+bool miniGit::gitAdd(string fileName){ //Created by: COLLIN Rasbid
     bool found=false;
+    bool addedAlready=false;
     int fileIndex=-1;
+    
+    doublyNode *myCommit =new doublyNode;
+    singlyNode *myFile= new singlyNode;
+
     DIR *dir; struct dirent *diread;
     vector<string> files;
 
@@ -31,15 +45,46 @@ bool miniGit::gitAdd(string fileName){
         for (int i=0;i< files.size();i++){
             // cout << "File: "<< files[i] <<" Input Filename: "<< fileName<< "| "<< endl;
            
-            if(files[i] == fileName){
+            if(files[i] == fileName){ // if file is contained within local directory
                 fileIndex=i;
-                cout<< "Enter TRUE"<< endl;
                 found=true;
-                break;
+                
+                if(dhead==NULL){//if dhead is null repository is empty and no commits have been made yet
+                    dhead= new doublyNode;
+                    dhead->next=NULL;
+                    dhead->previous=NULL;
+                    dhead->commitNumber=0;//initial commit of repository is set as zeroth commit
+                    dhead->committed=false;
+                    
+                    dhead->head=myFile;
+                    myFile->fileName=fileName;
+                }
+                else{
+                    //find how many commits have been made already
+
+
+
+
+                    //check to see if file has been added to commit already:
+                    while(myCommit->head=NULL){
+                        if(myCommit->head->fileName==fileName){
+                            addedAlready=true;
+                            cout <<"File has been added to Commits already"<< endl;
+                            break;
+                        }
+                    }
+                    
+                    if( !addedAlready){// if file has not been added already
+                        
+
+                    }
+
+                    break;
+                }
             }
         }
         if (found==true){//if the filename is included in the directory
-            cout<< "Filename Found"<< endl;
+            printCommit(dhead);
         }
         else{
             cout<< "Filename Not Found please enter a valid filename"<< endl << endl;
