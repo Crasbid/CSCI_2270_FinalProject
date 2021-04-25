@@ -3,6 +3,10 @@
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+#include <vector>
+#include <dirent.h>
+
+using namespace std;
 
 struct singlyNode {
     std::string fileName;    // Name of local file
@@ -23,6 +27,7 @@ class miniGit {
     doublyNode* head;
     public:
     miniGit();  // Constructor
+    bool gitAdd(string fileName); //funciton to add a file to repository
     ~miniGit(); // Destructor
-    
+
 };

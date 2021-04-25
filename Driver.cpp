@@ -1,7 +1,10 @@
 #include<iostream>
+#include<fstream>
+#include<cstdlib>
 #include<filesystem>
 #include <string>
-
+#include <vector>
+#include <dirent.h>
 #include "miniGit.hpp"
 
 using namespace std;
@@ -24,7 +27,10 @@ int main(int argc, char** argv){
 //variable initialization
 bool Correct_Char=false;
 char choice;
-    
+string userInput;
+bool quit=false;
+string fname;
+
 cout << "==== Welcome To Mini-Git ====" << endl;
 
 while (Correct_Char==false){//loop through until given a valid input.
@@ -50,9 +56,31 @@ while (Correct_Char==false){//loop through until given a valid input.
             break;
         }
 }
+while(!quit){
+    displayMenu();
+    cin>>userInput;
 
+    switch (stoi(userInput)){
 
+        case 1:
+            bool result;
+            result=false;
+            while(!result){
+            cout<<"Enter name of file to be added to commit"<< endl;
 
+            cin>>fname;
+            result= mGit.gitAdd(fname);
+           }
+            break;
 
+        case 5:
+            quit=true;
+            cout<< "Goodbye"<< endl;
+            break;
+        default:
+            cout << "Invalid Input" << endl;
+            break;
+    }
+}
     return 0;
 }
