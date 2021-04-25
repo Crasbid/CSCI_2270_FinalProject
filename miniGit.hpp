@@ -21,7 +21,7 @@ struct doublyNode{
     bool committed;// tracks weather or not commit is being stage or has been fully committed
 };
 
-
+// hello boi
 
 class miniGit {
     private:
