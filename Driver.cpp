@@ -1,8 +1,11 @@
 #include<iostream>
 #include<filesystem>
 #include <string>
-using namespace std;
 
+#include "miniGit.hpp"
+
+using namespace std;
+namespace fs = std::filesystem;
 
 void displayMenu() {
     cout << "==== Menu ====" << endl;
@@ -15,21 +18,41 @@ void displayMenu() {
 }
 
 int main(int argc, char** argv){
+
+//create miniGit class
+     miniGit mGit;
+//variable initialization
+bool Correct_Char=false;
+char choice;
+    
 cout << "==== Welcome To Mini-Git ====" << endl;
 
-cout << "Inititalize a new repository? [Y/N]"<< endl;
-char choice;
-cin>> choice;
+while (Correct_Char==false){//loop through until given a valid input.
+    cout << "Inititalize a new repository? [Y/N]"<< endl;
+    
+    cin>> choice;
 
-switch (toupper(choice))
-{
+    switch (toupper(choice))
+    {
 
-    case 'Y': //user wants to create a new REPO
-
-
-    case 'N': //user wants to use an existing REPO
-
-
+        case 'Y': //user wants to create a new REPO
+            Correct_Char=true;
+           
+            fs::remove_all(".minigit");
+            fs::create_directory(".minigit");
+            cout << "New Directory Created '.minigit'"<< endl;
+            break;
+        case 'N': //user wants to use an existing REPO
+            Correct_Char=true;
+            break;
+        default ://Invalid character is entered
+            if (Correct_Char==false){cout<< "Please Enter a valid Character"<< endl;}
+            break;
+        }
 }
+
+
+
+
     return 0;
 }
