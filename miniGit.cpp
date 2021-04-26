@@ -74,13 +74,60 @@ string VersionNameCreate(int Version, string fileName){
     return versionName;
 }
 
-bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Rasbid
-    bool found=false;
-    bool addedAlready=false;
-    int fileIndex=-1;
-    int version;
-    doublyNode *myCommit =new doublyNode;
-    singlyNode *myFile= new singlyNode;
+
+string getVersion(doublyNode*root, string filename){
+    cout<< "==========Entered GetVersion==========="<< endl<< endl;
+    //traverse through previous dll to find any previous versions
+    doublyNode * current;
+    singlyNode * commitFile;
+    string fileVer;
+    int Ver;
+    current=root;
+    // cout<< "Flag1"<< endl;
+    while(current->previous!=NULL){// if there is no previous dll node to begin with then version will always be 00_
+        // cout<< "flag2"<< endl;
+        current=root->previous;
+        commitFile=current->head;// set to first file in commit
+        if (commitFile->fileName==filename){//file found in previous commit
+            // cout<< "flag3"<< endl;
+            fileVer.append(commitFile->fileVersion,0,2);
+            
+            Ver=stoi(fileVer)+1;
+            
+
+            if (Ver<10){
+                fileVer="0"+to_string(Ver)+"_";
+                // cout<< "Ver: "<< Ver<< endl;
+            }
+            else{
+                
+                fileVer=to_string(Ver)+"_";
+                // cout<< "Ver: "<< Ver<< endl;
+            }
+            // cout<< "fileVer: "<< fileVer<<endl;
+            return fileVer;
+        }
+        else{
+            // cout<< "flag4"<< endl;
+            if(commitFile->next!=NULL){
+            commitFile=commitFile->next;
+            }
+            else break;
+
+        }
+        current=current->previous;//decrement to a previous commit
+    }   
+
+
+
+    return fileVer="00_";
+}
+
+
+void miniGit::gitAdd(string filename) {     // Adds/stages files WIP - Evan Hiemstra
+    ifstream fin(filename);
+    if(fin.is_open()) { // check if file exists
+        fin.close();
 
     DIR *dir; struct dirent *diread;
     vector<string> files;
@@ -133,13 +180,16 @@ bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Ras
                                     }
                                 }
 
-                                break;     
-                        }  
-                         
-                        else{// if we arent on the correct commit number iterate to the next one
-                            myCommit=myCommit->next;
-                        }
-
+            // check if in SLL
+            if(dpres->head != NULL) {
+                // cout<<"Flag1"<< endl;
+                singlyNode* pres = dpres->head;
+                while(pres->next != NULL) {
+                    // cout<<"Flag2 pres Filename: "<< pres->fileName<< "filename of add: "<<filename<< endl;
+                    if(pres->fileName == filename) {
+                        // cout<< "Flag3"<< endl;
+                        cout << "File with same name cannot be added twice" << endl;
+                        return;
                     }
                     
                     if( !addedAlready){// if file has not been added already
@@ -167,7 +217,31 @@ bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Ras
            
            printCommit(dhead,CommitNumber);
 
+                if(pres->fileName == filename) {
+                    // cout<< "Flag3"<< endl;
+                    cout << "File with same name cannot be added twice" << endl;
+                    return;
+                }
 
+                // otherwise add to end of SLL
+                singlyNode* nn = new singlyNode;
+                nn->fileName = filename;
+                nn->fileVersion = "00_" + filename;
+                nn->fileVersion = getVersion(dpres,filename) + filename; 
+                nn->next = NULL;
+
+                pres->next = nn;
+            }
+            else {  // if after commit 0
+                singlyNode* nn = new singlyNode;
+                nn->fileName = filename;
+                nn->fileVersion = "00_" + filename;
+                nn->fileVersion = getVersion(dpres,filename) + filename; 
+                nn->next = NULL;
+
+                dpres->head = nn;
+            }
+            printSL(dpres->head);
         }
         else{
             cout<< "Filename Not Found please enter a valid filename"<< endl << endl;
