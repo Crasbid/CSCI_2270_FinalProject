@@ -61,6 +61,19 @@ for(int i=0; i< CommitNumber;i++)
     return prevVersion+1;
 }
 
+string VersionNameCreate(int Version, string fileName){
+    string versionName;
+
+    if(Version < 10){
+        versionName="0"+to_string(Version)+"_"+fileName;
+    }
+    else{
+        versionName=to_string(Version)+"_"+fileName;
+    }
+
+    return versionName;
+}
+
 bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Rasbid
     bool found=false;
     bool addedAlready=false;
@@ -96,7 +109,7 @@ bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Ras
                     
                     dhead->head=myFile;
                     myFile->fileName=fileName;
-                    myFile->fileVersion="1";
+                    myFile->fileVersion="01_"+fileName;
                 }
                 else{
 
@@ -141,7 +154,7 @@ bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Ras
                         myFile->next=newNode;
                         newNode->fileName=fileName;
                         version=findVersionNumber(dhead,fileName,CommitNumber);
-                        newNode->fileVersion = fileName + to_string(version);
+                        newNode->fileVersion = VersionNameCreate(version,fileName);
                         // cout<< newNode->fileName << " Has been Committed "<< endl;
                     }   
                     else{cout<< endl<< "****File Already Commited****"<< endl<< endl;}
