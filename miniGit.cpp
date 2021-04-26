@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <vector>
 #include <dirent.h>
+#include <unistd.h>
 #include "miniGit.hpp"
 using namespace std;
 
@@ -71,7 +72,9 @@ bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Ras
     DIR *dir; struct dirent *diread;
     vector<string> files;
 
-    if ((dir = opendir("/mnt/d/OneDrive/Collin/School/CSCI 2270 Data Structures/FinalProject/CSCI_2270_FinalProject")) != nullptr) {//to work correctly on local machine, must change this to your directory
+    //get_current_dir_name()
+    char tmp[256];
+    if ((dir = opendir(getcwd(tmp, 256))) != nullptr) {// FIXED - EH
         while ((diread = readdir(dir)) != nullptr) {
             files.push_back(diread->d_name);
         }
@@ -138,7 +141,7 @@ bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Ras
                         myFile->next=newNode;
                         newNode->fileName=fileName;
                         version=findVersionNumber(dhead,fileName,CommitNumber);
-                        newNode->fileVersion=to_string(version);
+                        newNode->fileVersion = fileName + to_string(version);
                         // cout<< newNode->fileName << " Has been Committed "<< endl;
                     }   
                     else{cout<< endl<< "****File Already Commited****"<< endl<< endl;}
@@ -159,4 +162,66 @@ bool miniGit::gitAdd(string fileName,int CommitNumber){ //Created by: COLLIN Ras
         }
     
     return true;
+}
+
+void miniGit::gitRemove(string filename, int Commitnumber) {
+    if(dhead == NULL || dhead->head == NULL) {
+        cout << "No files to remove" << endl;
+        return;
+    }
+
+    singlyNode* trav = dhead->head;
+
+    while(trav != NULL) {
+        if(trav->fileName == filename) {
+            cout << "File found, deleting..." << endl;
+            
+            // Deleting the node
+            if(dhead->head->fileName == filename) {     // head case
+                singlyNode* temp = new singlyNode;
+                temp = trav;
+                dhead->head = trav->next;
+
+                delete temp;
+                temp = nullptr;
+            }
+            else {
+                singlyNode* prev = new singlyNode;
+                singlyNode* pres = new singlyNode;
+                prev = dhead->head;
+                pres = prev->next;
+
+                while(pres != trav) {
+                    prev = prev->next;
+                    pres = pres->next;
+                }
+                prev->next = pres->next;
+
+                delete pres;
+                pres = nullptr;
+            }
+            printCommit(dhead,Commitnumber);
+            cout << "File deleted" << endl;
+            return;
+        }
+        trav = trav->next;
+    }
+    cout << "File not found" << endl;
+}
+
+void miniGit::gitCommit() {
+    doublyNode* travCommit = dhead;
+    while(travCommit->next != NULL) {    // traverse to end of commit list
+        travCommit = travCommit->next;
+    }
+
+    // taverse the SLL
+    singlyNode* trav = travCommit->head;
+    while(trav != NULL) {
+
+
+
+
+        trav = trav->next;
+    }
 }

@@ -73,8 +73,19 @@ while(!quit){
             result= mGit.gitAdd(fname,CommitNumber);
            }
             break;
-        case 3:
-        CommitNumber++;
+
+        case 2:     // Remove - Evan Hiemstra
+            cout << "Enter name of file to be removed from commit" << endl;
+            cin >> fname;
+            mGit.gitRemove(fname,CommitNumber);
+            break;
+
+        case 3:     // Commit - Evan Hiemstra
+            CommitNumber++;
+            cout << "Committing changes..." << endl;
+            mGit.gitCommit();
+            break;
+
         case 5:
             quit=true;
             cout<< "Goodbye"<< endl;

@@ -29,6 +29,8 @@ class miniGit {
     public:
     miniGit();  // Constructor
     bool gitAdd(string fileName,int CommitNumber); //funciton to add a file to repository
+    void gitRemove(string filename, int CommitNumber);
+    void gitCommit();
     ~miniGit(); // Destructor
 
 };
