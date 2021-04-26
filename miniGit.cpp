@@ -9,11 +9,10 @@
 
 using namespace std;
 
-miniGit::miniGit() {
+miniGit::miniGit() {    // Constructor - Evan Hiemstra
     dhead=NULL;
 }
-miniGit::~miniGit() {
-    // TODO
+miniGit::~miniGit() {       // Destructor - Evan Hiemstra
     if(dhead != NULL) {
         doublyNode* dnode = dhead;
 
@@ -47,15 +46,7 @@ miniGit::~miniGit() {
     }
 }
 
-doublyNode* travDLL(doublyNode* root) {
-
-    while(root->next != NULL) {
-        root = root->next;
-    }
-    return root;
-}
-
-void printSL(singlyNode* root) {
+void printSL(singlyNode* root) {    // Prints the current SLL - Evan Hiemstra
     cout << "Current SL:" << endl;
     while(root != NULL) {
         cout << root->fileName << endl;
@@ -64,7 +55,7 @@ void printSL(singlyNode* root) {
     cout << endl;
 }
 
-void miniGit::gitAdd(string filename) {
+void miniGit::gitAdd(string filename) {     // Adds/stages files WIP - Evan Hiemstra
     ifstream fin(filename);
     if(fin.is_open()) {
         fin.close();
@@ -128,7 +119,7 @@ void miniGit::gitAdd(string filename) {
     }
 }
 
-void miniGit::gitRemove(string filename) {
+void miniGit::gitRemove(string filename) {      // Remove file from staging - Evan Hiemstra
     if(dhead == NULL || dhead->head == NULL) {
         cout << "No files to remove" << endl;
         return;
@@ -175,7 +166,7 @@ void miniGit::gitRemove(string filename) {
     cout << "File not found" << endl;
 }
 
-void miniGit::gitCommit() {
+void miniGit::gitCommit() {     // Commit staged files & versioning WIP - Evan Hiemstra
     if(dhead == NULL || dhead->head == NULL) {
         cout << "nothing to commit yet" << endl;
         return;
@@ -225,6 +216,7 @@ void miniGit::gitCommit() {
 
     chdir("..");
 
+    // Create new commit DLL node and set as new head
     doublyNode* dn = new doublyNode;
     dn->commitNumber = travCommit->commitNumber + 1;
     dn->head = NULL;

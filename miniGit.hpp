@@ -27,7 +27,7 @@ class miniGit {
     doublyNode* dhead;
     public:
     miniGit();  // Constructor
-    void gitAdd(string fileName); //funciton to add a file to repository
+    void gitAdd(string fileName); //function to add a file to repository
     void gitRemove(string filename);
     void gitCommit();
     ~miniGit(); // Destructor
