@@ -4,7 +4,7 @@
 #include <sstream>
 #include <filesystem>
 #include <vector>
-#include <dirent.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -13,14 +13,13 @@ struct singlyNode {
     std::string fileVersion; // Name of file in .minigit folder
     singlyNode * next;
 };
+
 struct doublyNode{
     int commitNumber;
     singlyNode * head;
     doublyNode * previous;
     doublyNode * next;
-    bool committed;// tracks weather or not commit is being staged or has been fully committed
 };
-
 
 
 class miniGit {
@@ -28,8 +27,8 @@ class miniGit {
     doublyNode* dhead;
     public:
     miniGit();  // Constructor
-    bool gitAdd(string fileName,int CommitNumber); //funciton to add a file to repository
-    void gitRemove(string filename, int CommitNumber);
+    void gitAdd(string fileName); //funciton to add a file to repository
+    void gitRemove(string filename);
     void gitCommit();
     ~miniGit(); // Destructor
 
