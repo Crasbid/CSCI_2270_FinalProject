@@ -223,18 +223,53 @@ void miniGit::gitRemove(string filename, int Commitnumber) {
 }
 
 void miniGit::gitCommit() {
+    if(dhead == NULL) {
+        return;
+    }
     doublyNode* travCommit = dhead;
     while(travCommit->next != NULL) {    // traverse to end of commit list
         travCommit = travCommit->next;
     }
 
+    chdir(".minigit");
+
     // taverse the SLL
     singlyNode* trav = travCommit->head;
     while(trav != NULL) {
 
+        ifstream fin(trav->fileVersion);
+        if(fin.is_open()) {
+            cout << "file is already there" << endl;
+            ostringstream ss;
+            ss << fin.rdbuf();
+            string str1 = ss.str();
+            fin.close();
+
+            chdir("..");
+            ifstream fin(trav->fileName);
+            ss << fin.rdbuf();
+            string str2 = ss.str();
+            fin.close();
+            chdir(".minigit");
 
 
+        }
+        else {
+            cout << "file needs to be created" << endl;
+            ofstream fout(trav->fileVersion);
+
+            chdir("..");
+            ifstream fin(trav->fileName);
+            chdir(".minigit");
+
+            fout << fin.rdbuf();
+
+            fin.close();
+            fout.close();
+        }
 
         trav = trav->next;
     }
+
+    chdir("..");
 }
