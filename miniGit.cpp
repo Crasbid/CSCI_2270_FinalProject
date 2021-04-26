@@ -57,10 +57,10 @@ void printSL(singlyNode* root) {    // Prints the current SLL - Evan Hiemstra
 
 void miniGit::gitAdd(string filename) {     // Adds/stages files WIP - Evan Hiemstra
     ifstream fin(filename);
-    if(fin.is_open()) {
+    if(fin.is_open()) { // check if file exists
         fin.close();
 
-        if(dhead == NULL) {
+        if(dhead == NULL) { // If this is first file to be staged
             doublyNode* dn = new doublyNode;
             dn->commitNumber = 0;
             dn->next = NULL;
@@ -92,6 +92,7 @@ void miniGit::gitAdd(string filename) {     // Adds/stages files WIP - Evan Hiem
                     pres = pres->next;
                 }
 
+                // otherwise add to end of SLL
                 singlyNode* nn = new singlyNode;
                 nn->fileName = filename;
                 nn->fileVersion = "00_" + filename;
@@ -100,7 +101,7 @@ void miniGit::gitAdd(string filename) {     // Adds/stages files WIP - Evan Hiem
 
                 pres->next = nn;
             }
-            else {
+            else {  // if after commit 0
                 singlyNode* nn = new singlyNode;
                 nn->fileName = filename;
                 nn->fileVersion = "00_" + filename;
